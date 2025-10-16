@@ -21,21 +21,21 @@ jobs:
         with:
           node-version: 20
 
-      # Step 3: Install dependencies
+      # Step 3: Install frontend dependencies
       - name: Install dependencies
         working-directory: ./frontend
         run: npm install
 
-      # Step 4: Build the frontend
+      # Step 4: Build frontend
       - name: Build frontend
         working-directory: ./frontend
         run: npm run build
 
-      # Step 5: Deploy to gh-pages
-- name: Deploy to GitHub Pages
-  uses: peaceiris/actions-gh-pages@v4
-  with:
-    personal_token: ${{ secrets.GH_PAT }}
-    publish_dir: ./frontend/build
-    publish_branch: gh-pages
+      # Step 5: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided by GitHub Actions
+          publish_dir: ./frontend/build             # Path to your build folder
+          publish_branch: gh-pages                  # Branch to deploy to
 
