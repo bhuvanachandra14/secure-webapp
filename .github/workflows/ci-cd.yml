@@ -2,42 +2,40 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build-deploy:
+  build-and-deploy:
+    name: Build and Deploy Frontend
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '22'
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-    - name: Install backend dependencies
-      run: |
-        cd backend
-        npm install
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm install
 
-    - name: Install frontend dependencies
-      run: |
-        cd frontend
-        npm install
+      # Step 4: Build the frontend
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
 
-    - name: Build frontend
-      run: |
-        cd frontend
-        npm run build
-
-    # Optional: deploy frontend to GitHub Pages
-    - name: Deploy frontend to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./frontend/dist
-
+      # Step 5: Deploy to gh-pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/build
+          # Optionally set the branch you want to deploy to
+          publish_branch: gh-pages
