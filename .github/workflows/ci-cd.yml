@@ -32,10 +32,10 @@ jobs:
         run: npm run build
 
       # Step 5: Deploy to gh-pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-	  personal_token: ${{ secrets.GH_PAT }}
-          publish_dir: ./frontend/build
-          # Optionally set the branch you want to deploy to
-          publish_branch: gh-pages
+- name: Deploy to GitHub Pages
+  uses: peaceiris/actions-gh-pages@v4
+  with:
+    personal_token: ${{ secrets.GH_PAT }}
+    publish_dir: ./frontend/build
+    publish_branch: gh-pages
+
