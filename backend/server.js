@@ -1,33 +1,26 @@
-// backend/server.js
+import express from "express";
+import cors from "cors";
 
-// 1. Import required modules
-const express = require("express");
-const cors = require("cors");
-
-// 2. Create the Express app
 const app = express();
+const PORT = 3001;
 
-// 3. Middleware
-app.use(cors());          // allow requests from any origin
-app.use(express.json());  // parse JSON request bodies
+app.use(cors());
+app.use(express.json());
 
-// 4. Home route
-app.get("/", (req, res) => {
-  res.json({ message: "Backend is running securely 🚀" });
-});
+let users = [];
 
-// 5. Sample API route
-app.get("/api/users", (req, res) => {
-  const users = [
-    { id: 1, name: "Alice" },
-    { id: 2, name: "Bob" },
-    { id: 3, name: "Charlie" }
-  ];
+app.get("/users", (req, res) => {
   res.json(users);
 });
 
-// 6. Start server on port 3001
-const PORT = 3001;
+app.post("/login", (req, res) => {
+  const { username } = req.body;
+  if (!username) return res.status(400).json({ error: "Username required" });
+
+  if (!users.includes(username)) users.push(username);
+  res.json({ users });
+});
+
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Backend running securely 🚀 on port ${PORT}`);
 });
